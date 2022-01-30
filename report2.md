@@ -18,7 +18,6 @@
 	
 - Only one 392 and one 492 student will be assigned to each course. If a 492 student is unavailable, then a second 392 student will be assigned.
 
-	
 - Lastly, we will output the list of students and their course assignments into a CSV file.
 
 **This is our basic Algorithmic approach, which can be modified as required.** 
