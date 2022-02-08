@@ -11,7 +11,7 @@ public class Student {
     String email;
     String graduatingQuarter;
     int graduatingYear;
-    int type;   //type of TA
+    int type;
     boolean inEllensburg;
     int[] availability;
     boolean pythonExperience;
@@ -44,62 +44,126 @@ public class Student {
     }
     
     
+    // GETTERS
     public String getFirstName()
     {
-        return this.firstName;
+        return firstName;
     }
     
     public String getLastName()
     {
-        return this.lastName;
+        return lastName;
     }
     
     public int getId()
     {
-        return this.id;
+        return id;
     }
     public String getEmail()
     {
-        return this.email;
+        return email;
     }
     
     public String getGraduatingQuarter()
     {
-        return this.graduatingQuarter;
+        return graduatingQuarter;
     }
     
     public int getGraduatingYear()
     {
-        return this.graduatingYear;
+        return graduatingYear;
     }
     
     public int getType()
     {
-        return this.type;
+        return type;
     }
     
     public boolean getInEllensburg()
     {
-        return this.inEllensburg;
+        return inEllensburg;
     }
     
     public int[] getAvailability()
     {
-        return this.availability;
+        return availability;
     }
     
     public boolean getPythonExperience()
     {
-        return this.pythonExperience;
+        return pythonExperience;
     }
     
     public boolean getVisualBasicExperience()
     {
-        return this.visualBasicExperience;
+        return visualBasicExperience;
     }
     
     public String[] getCoursesTaken()
     {
-        return this.coursesTaken;
+        return coursesTaken;
+    }
+    
+    
+    
+    // SETTERS
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+    
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+    
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+    
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+    
+    public void setGraduatingQuarter(String graduatingQuarter)
+    {
+        this.graduatingQuarter = graduatingQuarter;
+    }
+    
+    public void setGraduatingYear(int graduatingYear)
+    {
+        this.graduatingYear = graduatingYear;
+    }
+    
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+    
+    public void setInEllensburg(boolean inEllensburg)
+    {
+        this.inEllensburg = inEllensburg;
+    }
+    
+    public void setAvailability(int[] availability)
+    {
+        this.availability = availability;
+    }
+    
+    public void setPythonExperience(boolean pythonExperience)
+    {
+        this.pythonExperience = pythonExperience;
+    }
+    
+    public void setVisualBasicExperience(boolean visualBasicExperience)
+    {
+        this.visualBasicExperience = visualBasicExperience;
+    }
+    
+    public void setCoursesTaken(String[] coursesTaken)
+    {
+        this.coursesTaken = coursesTaken;
     }
 }
