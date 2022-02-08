@@ -5,18 +5,18 @@ package com.mycompany.assignta;
  * @author Ramez Khalaf
  */
 public class Student {
-    String firstName;
-    String lastName;
-    int id;
-    String email;
-    String graduatingQuarter;
-    int graduatingYear;
-    int type;
-    boolean inEllensburg;
-    int[] availability;
-    boolean pythonExperience;
-    boolean visualBasicExperience;
-    String[] coursesTaken;
+    private String firstName;
+    private String lastName;
+    private int id;
+    private String email;
+    private String graduatingQuarter;
+    private int graduatingYear;
+    private int type;
+    private boolean inEllensburg;
+    private boolean[] availability;
+    private boolean pythonExperience;
+    private boolean visualBasicExperience;
+    private boolean[] coursesTaken;
     
     
     public Student()
@@ -26,8 +26,8 @@ public class Student {
     
     
     public Student(String firstName, String lastName, int id, String email, String graduatingQuarter, 
-            int year, int type, boolean inEllensburg, int[] availability, boolean pythonExperience, 
-            boolean visualBasicExperience, String[] coursesTaken)
+            int year, int type, boolean inEllensburg, boolean[] availability, boolean pythonExperience, 
+            boolean visualBasicExperience, boolean[] coursesTaken)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -84,7 +84,7 @@ public class Student {
         return inEllensburg;
     }
     
-    public int[] getAvailability()
+    public boolean[] getAvailability()
     {
         return availability;
     }
@@ -99,7 +99,7 @@ public class Student {
         return visualBasicExperience;
     }
     
-    public String[] getCoursesTaken()
+    public boolean[] getCoursesTaken()
     {
         return coursesTaken;
     }
@@ -147,7 +147,7 @@ public class Student {
         this.inEllensburg = inEllensburg;
     }
     
-    public void setAvailability(int[] availability)
+    public void setAvailability(boolean[] availability)
     {
         this.availability = availability;
     }
@@ -162,7 +162,7 @@ public class Student {
         this.visualBasicExperience = visualBasicExperience;
     }
     
-    public void setCoursesTaken(String[] coursesTaken)
+    public void setCoursesTaken(boolean[] coursesTaken)
     {
         this.coursesTaken = coursesTaken;
     }
