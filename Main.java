@@ -15,11 +15,11 @@ public class Main{
          reader = new BufferedReader(new FileReader(file));
          ArrayList<Student> students = new ArrayList();
          
-         /*// Get first line... or two?
-         if ((line = reader.readLine()) != null)
-         {
-             String[] lineOne = line.split(", ");
-         }*/
+         // Get first two lines?
+         if ((reader.readLine()) != null)
+             reader.readLine();
+         if ((reader.readLine()) != null)
+             reader.readLine();
          
          while((line= reader.readLine())!= null)
          {
