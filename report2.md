@@ -17,7 +17,6 @@
 	  whether or not there is already a CS392 or CS492 student assigned to the course.
 	
 - Only one 392 and one 492 student will be assigned to each course. If a 492 student is unavailable, then a second 392 student will be assigned.
-
 - Lastly, we will output the list of students and their course assignments into a CSV file.
 
 **This is our basic Algorithmic approach, which can be modified as required.** 
@@ -32,3 +31,5 @@
 ## Possible Issues:
 
 - Optimization
+- We still have to figure out how algorithm will react to the conflict in the class schedule and student's avialibility.
+   
