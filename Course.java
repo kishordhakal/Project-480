@@ -19,6 +19,7 @@ public class Course {
     private String room;
     private String campus;
     private int[] assignedTAs;      // HOLDS THE ID OF ALL TAs ASSIGNED
+    private int[] assignedTATypes;  //faster than calculating if the current course has a 392 and/or a 492 student each time we want that info
     
     
     public Course()
@@ -28,7 +29,7 @@ public class Course {
     
     
     public Course(String sub, String cat, String sec, String title, String name, 
-            ArrayList<String> days, String startTime, String endTime, String room, String campus, int[] assignedTAs)
+            ArrayList<String> days, String startTime, String endTime, String room, String campus)
     {
         this.sub = sub;
         this.cat = cat;
@@ -40,7 +41,12 @@ public class Course {
         this.endTime = endTime;
         this.room = room;
         this.campus = campus;
-        this.assignedTAs = assignedTAs;
+        this.assignedTAs = new int[2];
+        this.assignedTAs[0] = 0;
+        this.assignedTAs[1] = 0;
+        this.assignedTATypes = new int[2];
+        this.assignedTATypes[0] = 0;
+        this.assignedTATypes[1] = 0;
     }
     
     
@@ -100,7 +106,10 @@ public class Course {
         return assignedTAs;
     }
     
-    
+    public int[] getAssignedTATypes()
+    {
+        return assignedTATypes;
+    }
     
     
     // SETTERS
@@ -157,9 +166,23 @@ public class Course {
         this.campus = campus;
     }
     
-    public void setAssignedTAs(int[] assignedTAs)
+    public void setAssignedTAs(int id)
     {
-        this.assignedTAs = assignedTAs;
+        if(this.assignedTAs[0] != 0)
+            this.assignedTAs[0] = id;
+        else
+            this.assignedTAs[1] = id;
     }
     
+    public void setAssignedTATypes(boolean student392, boolean student492)
+    {
+        if(student392 == true)
+        {
+            this.assignedTATypes[0] += 1;
+        }
+        if(student492 == true)
+        {
+            this.assignedTATypes[1] += 1;
+        }
+    }
 }
