@@ -1,22 +1,28 @@
 package com.mycompany.assignta;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.LinkedList;
+
 /**
  *
  * @author Ramez Khalaf
  */
-public class Student {
+public class Student implements Comparable<Student>
+{
     private String firstName;
     private String lastName;
     private int id;
     private String email;
-    private String graduatingQuarter;
-    private int graduatingYear;
-    private int type;
+    private String graduatingQuarter;       //priority 1
+    private int graduatingYear;             //priority 1
+    private int type;                       //already split into 2 arrays based on type
     private boolean inEllensburg;
-    private boolean[] availability;
-    private boolean pythonExperience;
-    private boolean visualBasicExperience;
-    private boolean[] coursesTaken;
+    private boolean[] availability;         //priority 2
+    private boolean pythonExperience;       //if yes, then assign to a python course
+    private boolean visualBasicExperience;  //if yes, then assign to a vb course
+    private boolean[] coursesTaken;         //only allowed to TA for courses already taken, so check first
+    private int priority;//new
     
     
     public Student()
@@ -41,6 +47,8 @@ public class Student {
         this.pythonExperience = pythonExperience;
         this.visualBasicExperience = visualBasicExperience;
         this.coursesTaken = coursesTaken;
+        setPriority();
+        
     }
     
     
@@ -102,6 +110,11 @@ public class Student {
     public boolean[] getCoursesTaken()
     {
         return coursesTaken;
+    }
+    
+    public int getPriority()
+    {
+        return priority;
     }
     
     
@@ -166,4 +179,154 @@ public class Student {
     {
         this.coursesTaken = coursesTaken;
     }
+    
+    
+    private void setPriority()
+    {
+        //PUT THIS IN CONSTRUCTOR OR SOMETHING
+        LocalDate date = LocalDate.now();
+        
+        // If graduatingYear is this year && its not the end of the year, then set priority = 1.
+        // Also, if graduating year is next year and it is currently the end of a year, then still set priority = 1.
+        if(((graduatingYear - date.getYear()) == 0  && (date.getMonthValue() != 9  && date.getMonthValue() != 10  && date.getMonthValue() != 11  && date.getMonthValue() != 12)) ||
+        // Also, if graduating year is next year and it is currently the end of a year, then still set priority = 1.
+                ((graduatingYear - date.getYear()) == 1 && (date.getMonthValue() == 9 || date.getMonthValue() == 10 || date.getMonthValue() == 11 || date.getMonthValue() == 12)))
+        {
+            priority = 1;
+        }
+        else
+        {
+            priority = 2;
+        }
+        
+        // AND THEN, IF GRADQUARTER IS NEXT QUARTER, THEN +0 priority. IF THE QUARTER AFTER NEXT QUARTER, THEN +1 priority... etc.
+        //if((graduatingQuarter - ))
+        LinkedList<String> list = getCurrentQuarter();
+        if(list != null && !list.isEmpty())
+        {
+            if(graduatingQuarter.equalsIgnoreCase(list.get(1)))
+            {
+                priority += 0;
+            }
+            else if(graduatingQuarter.equalsIgnoreCase(list.get(2)))
+            {
+                priority += 1;
+            }
+            else if(graduatingQuarter.equalsIgnoreCase(list.get(3)))
+            {
+                priority += 2;
+            }
+            else
+            {
+                priority += 3;
+            }
+        }
+    }
+    
+    
+    
+    private LinkedList<String> getCurrentQuarter()
+    {
+        LocalDate date = LocalDate.now();
+        LinkedList<String> quarters = new LinkedList();
+        // If graduatingQuarter is one quarter away, then priority +0. If its two quarters away, then priority +1
+         // && date.getDayOfMonth() < 4)  //WINTER QUARTER STARTS JANUARY 4. //IF IT IS BEFORE THE START OF WINTER QUARTER, THEN CURRENT QUARTER IS FALL
+        switch(date.getMonthValue())
+        {
+            case 1:
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                break;
+            case 2:
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                break;
+            case 3:
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                break;
+            case 4:
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                quarters.add("Winter");
+                break;
+            case 5:
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                quarters.add("Winter");
+                break;
+            case 6:
+                quarters.add("Spring");
+                quarters.add("Summer");
+                quarters.add("Fall");
+                quarters.add("Winter");
+                break;
+            case 7:
+                quarters.add("Summer");
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                break;
+            case 8:
+                quarters.add("Summer");
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                break;
+            case 9:
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                break;
+            case 10:
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                break;
+            case 11:
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                break;
+            case 12:
+                quarters.add("Fall");
+                quarters.add("Winter");
+                quarters.add("Spring");
+                quarters.add("Summer");
+                break;
+        }
+        
+        return quarters;
+    }
+    
+    
+    /*
+    public int compare(Student a, Student b)
+    {
+        
+        return 1;
+    }
+    */
+
+    // Used to sort students by priority.
+    @Override
+    public int compareTo(Student other)
+    {
+        //first, go through courses taken. Those are the only classes that student is eligible to TA
+        return this.priority - other.priority;
+    }
+    
+    
+    
 }
