@@ -1,7 +1,6 @@
 package com.mycompany.assignta;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -181,7 +180,7 @@ public class Student implements Comparable<Student>
     }
     
     
-    private void setPriority()
+    public final void setPriority()
     {
         //PUT THIS IN CONSTRUCTOR OR SOMETHING
         LocalDate date = LocalDate.now();
@@ -231,93 +230,116 @@ public class Student implements Comparable<Student>
         LinkedList<String> quarters = new LinkedList();
         // If graduatingQuarter is one quarter away, then priority +0. If its two quarters away, then priority +1
          // && date.getDayOfMonth() < 4)  //WINTER QUARTER STARTS JANUARY 4. //IF IT IS BEFORE THE START OF WINTER QUARTER, THEN CURRENT QUARTER IS FALL
-        switch(date.getMonthValue())
-        {
-            case 1:
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                break;
-            case 2:
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                break;
-            case 3:
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                break;
-            case 4:
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                quarters.add("Winter");
-                break;
-            case 5:
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                quarters.add("Winter");
-                break;
-            case 6:
-                quarters.add("Spring");
-                quarters.add("Summer");
-                quarters.add("Fall");
-                quarters.add("Winter");
-                break;
-            case 7:
-                quarters.add("Summer");
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                break;
-            case 8:
-                quarters.add("Summer");
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                break;
-            case 9:
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                break;
-            case 10:
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                break;
-            case 11:
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                break;
-            case 12:
-                quarters.add("Fall");
-                quarters.add("Winter");
-                quarters.add("Spring");
-                quarters.add("Summer");
-                break;
-        }
+         
+         if(date.getMonthValue() >= 1 && date.getMonthValue() < 4)
+         {
+             quarters.add("Winter");
+             quarters.add("Spring");
+             quarters.add("Summer");
+             quarters.add("Fall");
+         }
+         else if(date.getMonthValue() >= 4 && date.getMonthValue() < 7)
+         {
+             quarters.add("Spring");
+             quarters.add("Summer");
+             quarters.add("Fall");
+             quarters.add("Winter");
+         }
+         else if(date.getMonthValue() == 7 || date.getMonthValue() == 8)
+         {
+             quarters.add("Summer");
+             quarters.add("Fall");
+             quarters.add("Winter");
+             quarters.add("Spring");
+         }
+         else
+         {
+             quarters.add("Fall");
+             quarters.add("Winter");
+             quarters.add("Spring");
+             quarters.add("Summer");
+         }
+         
+//        switch(date.getMonthValue())
+//        {
+//            case 1:
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                break;
+//            case 2:
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                break;
+//            case 3:
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                break;
+//            case 4:
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                break;
+//            case 5:
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                break;
+//            case 6:
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                break;
+//            case 7:
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                break;
+//            case 8:
+//                quarters.add("Summer");
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                break;
+//            case 9:
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                break;
+//            case 10:
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                break;
+//            case 11:
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                break;
+//            case 12:
+//                quarters.add("Fall");
+//                quarters.add("Winter");
+//                quarters.add("Spring");
+//                quarters.add("Summer");
+//                break;
+//        }
         
         return quarters;
     }
     
     
-    /*
-    public int compare(Student a, Student b)
-    {
-        
-        return 1;
-    }
-    */
 
     // Used to sort students by priority.
     @Override
