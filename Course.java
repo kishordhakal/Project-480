@@ -18,18 +18,23 @@ public class Course {
     private String endTime;
     private String room;
     private String campus;
-    private int[] assignedTAs;      // HOLDS THE ID OF ALL TAs ASSIGNED
-    private int[] assignedTATypes;  //faster than calculating if the current course has a 392 and/or a 492 student each time we want that info
+    private int[] assignedTAs;      // HOLDS THE ID OF ALL TAs ASSIGNED (up to two TAs max)
+    private int[] assignedTATypes;  //easier than calculating if the current course has a 392 and/or a 492 student each time we want that info. Can delete.
     
     
     public Course()
     {
-        
+        this.assignedTAs = new int[2];
+        this.assignedTAs[0] = 0;
+        this.assignedTAs[1] = 0;
+        this.assignedTATypes = new int[2];
+        this.assignedTATypes[0] = 0;
+        this.assignedTATypes[1] = 0;
     }
     
     
     public Course(String sub, String cat, String sec, String title, String name, 
-            ArrayList<String> days, String startTime, String endTime, String room, String campus)
+            ArrayList<String> days, String startTime, String endTime, String room, String campus)   //maybe add assignedTAs and assignedTATypes
     {
         this.sub = sub;
         this.cat = cat;
@@ -168,7 +173,7 @@ public class Course {
     
     public void setAssignedTAs(int id)
     {
-        if(this.assignedTAs[0] != 0)
+        if(this.assignedTAs[0] == 0)
             this.assignedTAs[0] = id;
         else
             this.assignedTAs[1] = id;
