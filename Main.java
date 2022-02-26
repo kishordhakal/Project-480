@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -181,115 +183,8 @@ public class Main extends javax.swing.JFrame {
             
             
             // Assign CS 392 Students[]
-            for(int i = 0; i < students392.size(); i++)
-            {
-                if(students392.get(i).getPriority() == 1)
-                {
-                    //check availability        
-                    // Put student in the first availability you find. If another student isnt available at an available time, check one of the times thats already taken.
-                    // If the other student is available at that time, and the assigned student is also available at an empty time, then reassign the assigned student
-                    boolean[] availability = students392.get(i).getAvailability();
-                    for(int j = 0; j < NUMBER_OF_HOURS; j++)
-                    {
-                        for(int x = NUMBER_OF_COURSES - 1; x >= 0; x--)
-                        {
-                            int[] assignedTATypes = courses.get(x).getAssignedTATypes();
-                            // if TA is not already assigned, then add TA. Else, already has TA, move to next.
-                            if(availability[j] && assignedTATypes[1] == 0)// && students492.get(i).getCoursesTaken().get)
-                            {
-                                // If course is in person, AND student is on campus, then assign them to that course.
-                                if(courses.get(x).getCampus().equalsIgnoreCase("Eburg") && students392.get(i).getInEllensburg() == true)
-                                {
-                                    courses.get(x).setAssignedTAs(students392.get(i).getId());
-                                    courses.get(x).setAssignedTATypes(true, false);
-                                }
-                                // if course is online, and student is online, then assign them to that course.
-                                else if(courses.get(x).getCampus().equalsIgnoreCase("Web") && students392.get(i).getInEllensburg() == false)
-                                {
-                                    courses.get(x).setAssignedTAs(students392.get(i).getId());
-                                    courses.get(x).setAssignedTATypes(true, false);
-                                }
-                                else
-                                {
-                                    // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                    // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-                                }
-                            }
-                            else
-                            {
-                                //Else, already has TA, move to next. So probably delete else.
-                            }
-                        }
-                    }
-                    
-                }
-                else if(students392.get(i).getPriority() == 2)
-                {
-                    
-                }
-                else if(students392.get(i).getPriority() > 2)
-                {
-                    
-                }
-            }
-            
-            
-            
-            
-            
-            // Assign CS492 Students[]
-            for(int i = 0; i < students492.size(); i++)
-            {
-                if(students492.get(i).getPriority() == 1)
-                {
-                    //check availability        
-                    // Put student in the first availability you find FOR A COURSE THAT STUDENT HAS TAKEN.
-                    // If another student isnt available at an available time, check one of the times thats already taken.
-                    // If the other student is available at that time, and the assigned student is also available at an empty time, then reassign the assigned student
-                    boolean[] availability = students492.get(i).getAvailability();
-                    for(int j = 0; j < NUMBER_OF_HOURS; j++)
-                    {
-                        for(int x = 0; x < NUMBER_OF_COURSES; x++)
-                        {
-                            int[] assignedTATypes = courses.get(x).getAssignedTATypes();
-                            // if TA is not already assigned, then add TA. Else, already has TA, move to next.
-                            if(availability[j] && assignedTATypes[1] == 0)// && students492.get(i).getCoursesTaken().get)
-                            {
-                                // If course is in person, AND student is on campus, then assign them to that course.
-                                if(courses.get(x).getCampus().equalsIgnoreCase("Eburg") && students392.get(i).getInEllensburg() == true)
-                                {
-                                    courses.get(x).setAssignedTAs(students392.get(i).getId());
-                                    courses.get(x).setAssignedTATypes(true, false);
-                                }
-                                // if course is online, and student is online, then assign them to that course.
-                                else if(courses.get(x).getCampus().equalsIgnoreCase("Web") && students392.get(i).getInEllensburg() == false)
-                                {
-                                    courses.get(x).setAssignedTAs(students392.get(i).getId());
-                                    courses.get(x).setAssignedTATypes(true, false);
-                                }
-                                else
-                                {
-                                    // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                    // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-                                }
-                            }
-                            else
-                            {
-                                //Else, already has TA, move to next. So probably delete else.
-                            }
-                        }
-                    }
-                    
-                }
-                else if(students492.get(i).getPriority() == 2)
-                {
-                    
-                }
-                else if(students492.get(i).getPriority() > 2)
-                {
-                    
-                }
-            }
+            assignTAs(students392, courses);
+            assignTAs(students492, courses);
             
             
             // Print new ArrayLists
@@ -336,7 +231,136 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     // End of variables declaration                   
 
-   
+   //Assign students to courses
+   public static void assignTAs(ArrayList<Student> students, ArrayList<Course> courses)
+   {
+        final int NUMBER_OF_COURSES = 44;   // 
+        final int NUMBER_OF_HOURS = 32;     // better way to get 
+        
+        
+        // Checks if the course AND student are available at that time. Does course already have a TA of that type? 
+        for(int i = 0; i < students.size(); i++)
+        {
+            if(students.get(i).getType() == 392)
+            {
+                if(students.get(i).getPriority() == 1)
+                {
+                    //check availability        
+                    // Put student in the first availability you find. If another student isnt available at an available time, check one of the times thats already taken.
+                    // If the other student is available at that time, and the assigned student is also available at an empty time, then reassign the assigned student
+                    for(int j = NUMBER_OF_COURSES - 1; j >= 0; j--)    // for each hour of the day, attempt to assign students to a course active during that hour
+                    {
+                        for(int x = 0; x < NUMBER_OF_HOURS; x++)  // Another loop to go through and check/assign each course.
+                        {
+                            //Check each course to see if it has 0, 1, or 2 TAs.
+                            int[] assignedTATypes = courses.get(j).getAssignedTATypes();
+                            boolean[] availability = students.get(i).getAvailability();
+                            String regex = "\\d+";          // regex to check start time.
+                            Pattern patt = Pattern.compile(regex);
+                            Matcher matcher = patt.matcher(courses.get(j).getStartTime());
+
+                            // if TA is not already assigned, then add TA. Else, already has TA, move to next.
+                            if(students.get(i).getCourseAssignment() == 0 && availability[x] && 
+                                    matcher.find() && matcher.group().startsWith(String.valueOf(x)) && assignedTATypes[1] == 0)// && students492.get(i).getCoursesTaken().get)
+                            {
+                                // If course is in person, AND student is on campus, then assign them to that course.
+                                if(courses.get(j).getCampus().equalsIgnoreCase("Eburg") && students.get(i).getInEllensburg() == true)
+                                {
+                                    courses.get(j).setAssignedTAs(students.get(i).getId());
+                                    courses.get(j).setAssignedTATypes(true, false);
+                                    students.get(i).setCourseAssignment(Integer.parseInt(courses.get(j).getCat()));
+                                }
+                                // if course is online, and student is online, then assign them to that course.
+                                else if(courses.get(j).getCampus().equalsIgnoreCase("Web") && students.get(i).getInEllensburg() == false)
+                                {
+                                    courses.get(j).setAssignedTAs(students.get(i).getId());
+                                    courses.get(j).setAssignedTATypes(true, false);
+                                    students.get(i).setCourseAssignment(Integer.parseInt(courses.get(j).getCat()));
+                                }
+                                else
+                                {
+                                    // else, either the student is online and the course is in person, or the student in on campus and the course is online
+                                    // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
+                                }
+                            }
+                            else
+                            {
+                                //Else, already has TA, move to next. So probably delete else.
+                            }
+                        }
+                    }
+
+                }
+                else if(students.get(i).getPriority() == 2)
+                {
+                    // assignTAs(2);            //CREATE THIS METHOD
+                }
+                else if(students.get(i).getPriority() > 2)
+                {
+                    // assignTAs(3);            //HERE TOO
+                }
+            }
+            else if(students.get(i).getType() == 492)
+            {
+                if(students.get(i).getPriority() == 1)
+                {
+                    //check availability        
+                    // Put student in the first availability you find. If another student isnt available at an available time, check one of the times thats already taken.
+                    // If the other student is available at that time, and the assigned student is also available at an empty time, then reassign the assigned student
+                    for(int j = NUMBER_OF_COURSES - 1; j >= 0; j--)    // for each hour of the day, attempt to assign students to a course active during that hour
+                    {
+                        for(int x = 0; x < NUMBER_OF_HOURS; x++)  // Another loop to go through and check/assign each course.
+                        {
+                            //Check each course to see if it has 0, 1, or 2 TAs.
+                            int[] assignedTATypes = courses.get(j).getAssignedTATypes();
+                            boolean[] availability = students.get(i).getAvailability();
+                            String regex = "\\d+";          // regex to check start time.
+                            Pattern patt = Pattern.compile(regex);
+                            Matcher matcher = patt.matcher(courses.get(j).getStartTime());
+
+                            // if TA is not already assigned, then add TA. Else, already has TA, move to next.
+                            if(students.get(i).getCourseAssignment() == 0 && availability[x] && 
+                                    matcher.find() && matcher.group().startsWith(String.valueOf(x)) && assignedTATypes[1] == 0)// && students492.get(i).getCoursesTaken().get)
+                            {
+                                // If course is in person, AND student is on campus, then assign them to that course.
+                                if(courses.get(j).getCampus().equalsIgnoreCase("Eburg") && students.get(i).getInEllensburg() == true)
+                                {
+                                    courses.get(j).setAssignedTAs(students.get(i).getId());
+                                    courses.get(j).setAssignedTATypes(true, false);
+                                    students.get(i).setCourseAssignment(Integer.parseInt(courses.get(j).getCat()));
+                                }
+                                // if course is online, and student is online, then assign them to that course.
+                                else if(courses.get(j).getCampus().equalsIgnoreCase("Web") && students.get(i).getInEllensburg() == false)
+                                {
+                                    courses.get(j).setAssignedTAs(students.get(i).getId());
+                                    courses.get(j).setAssignedTATypes(true, false);
+                                    students.get(i).setCourseAssignment(Integer.parseInt(courses.get(j).getCat()));
+                                }
+                                else
+                                {
+                                    // else, either the student is online and the course is in person, or the student in on campus and the course is online
+                                    // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
+                                }
+                            }
+                            else
+                            {
+                                //Else, already has TA, move to next. So probably delete else.
+                            }
+                        }
+                    }
+
+                }
+                else if(students.get(i).getPriority() == 2)
+                {
+                    // assignTAs(2);            //CREATE THIS METHOD
+                }
+                else if(students.get(i).getPriority() > 2)
+                {
+                    // assignTAs(3);            //HERE TOO
+                }
+            }
+        }
+   }
    
    
    // Set ArrayList<Student> data
@@ -459,65 +483,6 @@ public class Main extends javax.swing.JFrame {
            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
        }
    }
-   
-   // Assign students to courses
-//   public static void assignTAs(ArrayList<Student> students, ArrayList<Course> courses)
-//   {
-//        final int NUMBER_OF_COURSES = 44;   // 
-//        final int NUMBER_OF_HOURS = 32;     // better way to get 
-//       
-//       for(int i = 0; i < students.size(); i++)
-//            {
-//                if(students.get(i).getPriority() == 1)
-//                {
-//                    //check availability        
-//                    // Put student in the first availability you find. If another student isnt available at an available time, check one of the times thats already taken.
-//                    // If the other student is available at that time, and the assigned student is also available at an empty time, then reassign the assigned student
-//                    boolean[] availability = students.get(i).getAvailability();
-//                    for(int j = 0; j < NUMBER_OF_HOURS; j++)
-//                    {
-//                        for(int x = 0; x < NUMBER_OF_COURSES; x++)
-//                        {
-//                            int[] assignedTATypes = courses.get(x).getAssignedTATypes();
-//                            // if TA is not already assigned, then add TA. Else, already has TA, move to next.
-//                            if(availability[j] && assignedTATypes[1] == 0)// && students492.get(i).getCoursesTaken().get)
-//                            {
-//                                // If course is in person, AND student is on campus, then assign them to that course.
-//                                if(courses.get(x).getCampus().equalsIgnoreCase("Eburg") && students.get(i).getInEllensburg() == true)
-//                                {
-//                                    courses.get(x).setAssignedTAs(students.get(i).getId());
-//                                    courses.get(x).setAssignedTATypes(true, false);
-//                                }
-//                                // if course is online, and student is online, then assign them to that course.
-//                                else if(courses.get(x).getCampus().equalsIgnoreCase("Web") && students.get(i).getInEllensburg() == false)
-//                                {
-//                                    courses.get(x).setAssignedTAs(students.get(i).getId());
-//                                    courses.get(x).setAssignedTATypes(true, false);
-//                                }
-//                                else
-//                                {
-//                                    // else, either the student is online and the course is in person, or the student in on campus and the course is online
-//                                    // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-//                                }
-//                            }
-//                            else
-//                            {
-//                                //Else, already has TA, move to next. So probably delete else.
-//                            }
-//                        }
-//                    }
-//                    
-//                }
-//                else if(students.get(i).getPriority() == 2)
-//                {
-//                    
-//                }
-//                else if(students.get(i).getPriority() > 2)
-//                {
-//                    
-//                }
-//            }
-//   }
    
    
    
