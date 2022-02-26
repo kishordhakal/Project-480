@@ -22,11 +22,11 @@ public class Student implements Comparable<Student>
     private boolean visualBasicExperience;  //if yes, then assign to a vb course
     private boolean[] coursesTaken;         //only allowed to TA for courses already taken, so check first
     private int priority;//new
-    
+    private int courseAssignment;
     
     public Student()
     {
-        
+        this.courseAssignment = 0;
     }
     
     
@@ -46,8 +46,8 @@ public class Student implements Comparable<Student>
         this.pythonExperience = pythonExperience;
         this.visualBasicExperience = visualBasicExperience;
         this.coursesTaken = coursesTaken;
+        this.courseAssignment = 0;
         setPriority();
-        
     }
     
     
@@ -109,6 +109,11 @@ public class Student implements Comparable<Student>
     public boolean[] getCoursesTaken()
     {
         return coursesTaken;
+    }
+    
+    public int getCourseAssignment()
+    {
+        return courseAssignment;
     }
     
     public int getPriority()
@@ -179,6 +184,10 @@ public class Student implements Comparable<Student>
         this.coursesTaken = coursesTaken;
     }
     
+    public void setCourseAssignment(int courseAssignment)
+    {
+        this.courseAssignment = courseAssignment;
+    }
     
     public final void setPriority()
     {
@@ -259,82 +268,6 @@ public class Student implements Comparable<Student>
              quarters.add("Spring");
              quarters.add("Summer");
          }
-         
-//        switch(date.getMonthValue())
-//        {
-//            case 1:
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                break;
-//            case 2:
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                break;
-//            case 3:
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                break;
-//            case 4:
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                break;
-//            case 5:
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                break;
-//            case 6:
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                break;
-//            case 7:
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                break;
-//            case 8:
-//                quarters.add("Summer");
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                break;
-//            case 9:
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                break;
-//            case 10:
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                break;
-//            case 11:
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                break;
-//            case 12:
-//                quarters.add("Fall");
-//                quarters.add("Winter");
-//                quarters.add("Spring");
-//                quarters.add("Summer");
-//                break;
-//        }
         
         return quarters;
     }
