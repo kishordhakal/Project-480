@@ -144,8 +144,6 @@ public class Main extends javax.swing.JFrame {
             ArrayList<Student> students492 = new ArrayList();
             final int TYPE392 = 392;
             final int TYPE492 = 492;
-            final int NUMBER_OF_COURSES = 44;   // 
-            final int NUMBER_OF_HOURS = 32;     // better way to get 
             
             
             // Record student data
