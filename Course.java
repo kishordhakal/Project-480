@@ -85,7 +85,12 @@ public class Course {
     {
         return days;
     }
-    
+
+    public String getDay(int index)
+    {
+        return days.get(index);
+    }
+
     public String getStartTime()
     {
         return startTime;
