@@ -326,7 +326,15 @@ public class Main extends javax.swing.JFrame {
         catch(Exception e)
         {
             e.printStackTrace();
-        }    }  
+        }
+        
+      studentsAssigned = 0;      
+      studentsLeft = 0;
+      coursesWithOneTA = 0;
+      coursesWithNoTA = 0; 
+        
+        }
+          
 
     // Variables declaration - do not modify                     
     private static javax.swing.JTextField scheduleTextField;
