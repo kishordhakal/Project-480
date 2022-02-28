@@ -22,11 +22,11 @@ public class Student implements Comparable<Student>
     private boolean visualBasicExperience;  //if yes, then assign to a vb course
     private boolean[] coursesTaken;         //only allowed to TA for courses already taken, so check first
     private int priority;//new
-    private int courseAssignment;
+    private String courseAssignment;        //sadly the only way to check which course is which is by checking all the data for it
     
     public Student()
     {
-        this.courseAssignment = 0;
+        this.courseAssignment = "";
     }
     
     
@@ -46,7 +46,7 @@ public class Student implements Comparable<Student>
         this.pythonExperience = pythonExperience;
         this.visualBasicExperience = visualBasicExperience;
         this.coursesTaken = coursesTaken;
-        this.courseAssignment = 0;
+        this.courseAssignment = "";
         setPriority();
     }
     
@@ -111,7 +111,7 @@ public class Student implements Comparable<Student>
         return coursesTaken;
     }
     
-    public int getCourseAssignment()
+    public String getCourseAssignment()
     {
         return courseAssignment;
     }
@@ -184,7 +184,7 @@ public class Student implements Comparable<Student>
         this.coursesTaken = coursesTaken;
     }
     
-    public void setCourseAssignment(int courseAssignment)
+    public void setCourseAssignment(String courseAssignment)
     {
         this.courseAssignment = courseAssignment;
     }
