@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -17,6 +21,7 @@ public class Main extends javax.swing.JFrame {
             static int studentsLeft = 0;
             static int coursesWithOneTA = 0;
             static int coursesWithNoTA = 0;
+
     /**
      * Creates new form GUI
      */
@@ -46,6 +51,11 @@ public class Main extends javax.swing.JFrame {
 
         startButton.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         startButton.setText("Start");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonActionPerformed(evt);
+            }
+        });
 
         studentTextField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         studentTextField.setText("Enter students.csv file path here...");
@@ -105,6 +115,15 @@ public class Main extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Main().setVisible(true);
+            }
+        });
+    }
+    
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -316,14 +335,12 @@ public class Main extends javax.swing.JFrame {
         catch(Exception e)
         {
             e.printStackTrace();
-        }
-        
-    }
+        }    }  
 
     // Variables declaration - do not modify                     
-    private javax.swing.JTextField scheduleTextField;
+    private static javax.swing.JTextField scheduleTextField;
     private javax.swing.JButton startButton;
-    private javax.swing.JTextField studentTextField;
+    private static javax.swing.JTextField studentTextField;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration                   
 
@@ -689,7 +706,7 @@ public class Main extends javax.swing.JFrame {
        try 
        {
            
-           String file = "src//main//java//Files//students.csv";
+           String file = studentTextField.getText();
            BufferedReader reader = new BufferedReader(new FileReader(file));
            
             // Get first two lines
@@ -761,7 +778,7 @@ public class Main extends javax.swing.JFrame {
    {
        try {
            
-           String file= "src//main//java//Files//schedule.csv";
+           String file= scheduleTextField.getText();
            BufferedReader reader = new BufferedReader(new FileReader(file));
            String line = "";
            
