@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -15,6 +13,10 @@ import java.util.regex.Pattern;
  */
 public class Main extends javax.swing.JFrame {
 
+            static int studentsAssigned = 0;       //these 4 variables are for printing details about the output (see last method called in main)
+            static int studentsLeft = 0;
+            static int coursesWithOneTA = 0;
+            static int coursesWithNoTA = 0;
     /**
      * Creates new form GUI
      */
@@ -174,6 +176,7 @@ public class Main extends javax.swing.JFrame {
             Collections.sort(students492);
             
             
+            // Split 392 students by priority into 3 arrays
             ArrayList<Student> students392_p1 = new ArrayList();
             ArrayList<Student> students392_p2 = new ArrayList();
             ArrayList<Student> students392_remaining = new ArrayList();
@@ -193,7 +196,7 @@ public class Main extends javax.swing.JFrame {
                 }
             }
             
-            
+            // Split 492 students by priority into 3 arrays
             ArrayList<Student> students492_p1 = new ArrayList();
             ArrayList<Student> students492_p2 = new ArrayList();
             ArrayList<Student> students492_remaining = new ArrayList();
@@ -214,23 +217,81 @@ public class Main extends javax.swing.JFrame {
             }
             
             // Assign CS 392 Students[]
-            assignTAs(students392_p1, courses);
-            assignTAs(students392_p2, courses);
-            //assignTAs(students392_remaining, courses);
-            assignTAs(students492_p1, courses);
-            assignTAs(students492_p2, courses);
-            //assignTAs(students492_remaining, courses);
-            
+            assignHighPriority(students492_p1, courses);// , studentsAssigned);
+            assignHighPriority(students392_p1, courses);//, studentsAssigned);
+            assignHighPriority(students492_p2, courses);//, studentsAssigned);
+            assignHighPriority(students392_p2, courses);//, studentsAssigned);
+            assignLowPriority(students492_remaining, courses);
+            assignLowPriority(students392_remaining, courses);
             
             // Print new ArrayLists
             System.out.println("\nSTUDENTS (CS392): ");
             printStudentData(students392);
             System.out.println("\nSTUDENTS (CS492): ");
             printStudentData(students492);
-            
-            
             System.out.println("\nCourse Assignments: ");
             printCourseAssignments(courses);
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // EXTRA HELP
+            
+            for(int i = 0; i < students492_p1.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students492_p1.get(i) + ", ");
+            }
+            for(int i = 0; i < students492_p2.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students492_p2.get(i) + ", ");
+            }
+            for(int i = 0; i < students492_remaining.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students492_p2.get(i) + ", ");
+            }
+            for(int i = 0; i < students392_p1.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students392_p1.get(i) + ", ");
+            }
+            for(int i = 0; i < students392_p2.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students392_p2.get(i) + ", ");
+            }
+            for(int i = 0; i < students492_remaining.size(); i++)
+            {
+                studentsLeft++;
+                //System.out.println(students492_p2.get(i) + ", ");
+            }
+            System.out.println("\n\nDetails!");
+            printDetails(studentsAssigned, studentsLeft, coursesWithOneTA, coursesWithNoTA);
+            
+            
+            /*
+            System.out.println("\n392 Students Remaining:");
+            System.out.println(students392_p1.size());
+            System.out.println(students392_p2.size());
+            System.out.println(students392_remaining.size());
+            System.out.println("\n492 Students Remaining");
+            System.out.println(students492_p1.size());
+            System.out.println(students492_p2.size());
+            System.out.println(students492_remaining.size());
+            */
+            
             
             // THEN, CHECK IF THERE ARE ANY LEFTOVER 392/492 students left. If so, put them in any course with less than 2 TAs that works with their availability.
             
@@ -266,12 +327,158 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     // End of variables declaration                   
 
+    
+    //if priority 1, use assignHighPriority() on it first. If priority 2, use assignHighPriority() second. If priority > 2, assignLowPriority.
    //Assign students to courses
-   public static void assignTAs(ArrayList<Student> students, ArrayList<Course> courses)
+   public static void assignHighPriority(ArrayList<Student> students, ArrayList<Course> courses)//, int studentsAssigned)
    {
         //final int NUMBER_OF_HOURS = 32;     // better way to get //8 hours per day * 4 days (counted from students.csv)
         
         if(students.get(0).getType() == 392)
+        {
+            for(int i = 0; i < courses.size(); i++)
+            {
+                for(int j = 0; j < students.size(); j++)
+                {
+                    if(students.get(j).getCourseAssignment().equals(""))
+                    {// after this was if(priority == 1){
+                        //Check each course to see if it has 0, 1, or 2 TAs.
+                        int[] assignedTATypes = courses.get(i).getAssignedTATypes();
+                        boolean available = isAvailable(students, courses, i, j);   //checks if student is available at the time/day of class
+
+                        //System.out.println("HERE: " + students.get(j).getCourseAssignment().equals("") + ", " + available + ", " + (assignedTATypes[0] == 0));
+                        // if TA is not already assigned, then add TA. Else, already has TA, move to next.
+                        if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[0] == 0 && 
+                                available)// && students392.get(i).getCoursesTaken().get && student.hasPython/VBExperience+courseNeedsThem)
+                        {
+                            // If course is in person, AND student is on campus, then assign them to that course.
+                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                            {
+                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                courses.get(i).setAssignedTATypes(true, false);
+
+                                String courseAssignmentStr = "";
+                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
+                                {
+                                    courseAssignmentStr = courses.get(i).getDay(d);
+                                }
+                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
+                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
+                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+                                
+                                studentsAssigned++;
+                                students.remove(j);
+                            }
+                            // if course is online, and student is online, then assign them to that course.
+                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                            {
+                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                courses.get(i).setAssignedTATypes(true, false);
+
+                                // Set course assignment
+                                String courseAssignmentStr = "";
+                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
+                                {
+                                    courseAssignmentStr = courses.get(i).getDay(d);
+                                }
+                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
+                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
+                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+                                
+                                studentsAssigned++;
+                                students.remove(j);
+                            }
+                            else
+                            {
+                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
+                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
+                            }
+                        }
+                        else
+                        {
+                            //Else, already has TA, move to next. So probably delete else.
+                        }//AFTER THIS WAS }END PRIORITY
+                    }
+                }
+            }
+        }
+        else //then student.type == 492
+        {
+            for(int i = courses.size() - 1; i >= 0; i--)
+            {
+                for(int j = 0; j < students.size(); j++)
+                {
+                    if(students.get(j).getCourseAssignment().equals(""))
+                    {
+                        //Check each course to see if it has 0, 1, or 2 TAs.
+                        int[] assignedTATypes = courses.get(i).getAssignedTATypes();
+                        boolean available = isAvailable(students, courses, i, j);   //checks if student is available at the time/day of class
+
+                        // if TA is not already assigned, then add TA. Else, already has TA, move to next.
+                        if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[1] == 0 && 
+                                available)// && students392.get(i).getCoursesTaken().get)
+                        {
+                            // If course is in person, AND student is on campus, then assign them to that course.
+                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                            {
+                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                courses.get(i).setAssignedTATypes(false, true);
+
+                                String courseAssignmentStr = "";
+                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
+                                {
+                                    courseAssignmentStr = courses.get(i).getDay(d);
+                                }
+                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
+                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
+                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+
+                                studentsAssigned++;
+                                students.remove(j);
+                            }
+                            // if course is online, and student is online, then assign them to that course.
+                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                            {
+                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                courses.get(i).setAssignedTATypes(false, true);
+
+                                // Set course assignment
+                                String courseAssignmentStr = "";
+                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
+                                {
+                                    courseAssignmentStr = courses.get(i).getDay(d);
+                                }
+                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
+                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
+                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+                                
+                                studentsAssigned++;
+                                students.remove(j);
+                            }
+                            else
+                            {
+                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
+                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
+                            }
+                        }
+                        else
+                        {
+                            //Else, already has TA, move to next. So probably delete else.
+                        }
+                    }
+                }
+            }
+        }
+   }
+   
+   
+   
+   /*
+   This assignment algorithm uses a different algorithm to sort low priority      *STILL NEED TO IMPLEMENT*
+   */
+   public static void assignLowPriority(ArrayList<Student> students, ArrayList<Course> courses)
+   {
+       if(students.get(0).getType() == 392)
         {
             for(int i = 0; i < courses.size(); i++)
             {
@@ -404,7 +611,10 @@ public class Main extends javax.swing.JFrame {
         }
    }
    
-   public static void firstPass(ArrayList students392, ArrayList students492)
+   /*
+   This assignment algorithm allows adding up to two TAs of the same type (392/492)
+   */
+   public static void fillRemaining()
    {
        
    }
@@ -414,19 +624,12 @@ public class Main extends javax.swing.JFrame {
    {
         boolean[] availability = students.get(j).getAvailability();
         boolean available = false;      // Will be true if the student is available at the same time/day as the course
-        String regex = "\\d+";          // regex to check start time.
-        Pattern patt = Pattern.compile(regex);
-        Matcher matcher = patt.matcher(courses.get(i).getStartTime());
-        //int classTime = 0;
-        while(matcher.find())
+        
+        for(int y = 0; y < courses.get(i).getDays().size(); y++)
         {
-            //String temp = matcher.group();
-            //classTime = Integer.parseInt(temp);
-            matcher.find();
-
-            for(int y = 0; y < courses.get(i).getDays().size(); y++)
+            String classDays = courses.get(i).getDay(y);
+            if(classDays.equals("") || classDays.equals(" ") || classDays.matches("[a-zA-Z]+")) //&& student is not low priority)
             {
-                String classDays = courses.get(i).getDay(y);
                 if(classDays.equalsIgnoreCase("M"))
                 {
                     final int STUDENT_AVAIL_INDEX = 8;      // student.getAvailability returns a boolean array. Every 8 entries is another day of the week.
@@ -471,9 +674,13 @@ public class Main extends javax.swing.JFrame {
                         }
                     }
                 }
-            }
-        }
-       return available;
+                else if(courses.get(i).getCampus().equalsIgnoreCase("WEB"))
+                {
+                    available = true;
+                }
+            }//Else student wasnt assigned and still needs assignment {
+        }//AFTER THSI WAS THE WHILE LOOP END
+        return available;
    }
    
    // Set ArrayList<Student> data
@@ -495,50 +702,53 @@ public class Main extends javax.swing.JFrame {
             
             while((line = reader.readLine())!= null)
             {
-               String[] row = line.split(",");
-               Student student = new Student();
-               
-               
-               // ADDING STUDENT ATTRIBUTES: START
-               student.setFirstName(row[0]);
-               student.setLastName(row[1]);
-               student.setId(Integer.parseInt(row[2]));
-               student.setEmail(row[3]);
-               student.setGraduatingQuarter(row[4]);
-               student.setGraduatingYear(Integer.parseInt(row[5]));
-               student.setType(Integer.parseInt(row[6]));
-               if(row[7].equalsIgnoreCase("Yes"))
-                   student.setInEllensburg(true);
-               else
-                   student.setInEllensburg(false);
-               
-               // Availability loop
-               boolean[] availability = new boolean[32];
-               final int END_AVAIL_INPUT = 40;
-               for(int i = 8; i < END_AVAIL_INPUT; i++)
-               {
-                   availability[i - 8] = row[i].equalsIgnoreCase("Open");
-               }
-               student.setAvailability(availability);
-               
-               // PythonExperience
-               student.setPythonExperience(row[41].equalsIgnoreCase("Yes"));
-               // VBExperience (Make shorter)
-               student.setVisualBasicExperience(row[42].equalsIgnoreCase("Yes"));
-               
-               // coursesTaken loop    53
-               boolean[] coursesTaken = new boolean[21];
-               for(int i = 43; i < row.length; i++)
-               {
-                   coursesTaken[i - (43)] = row[i].equalsIgnoreCase("X");
-               }
-               student.setCoursesTaken(coursesTaken);
-               
-               // Set priority
-               student.setPriority();
-               
-               students.add(student);
-               // ADDING STUDENT ATTRIBUTES: COMPLETE
+                if(line.contains(","))
+                {
+                   String[] row = line.split(",");
+                   Student student = new Student();
+
+
+                   // ADDING STUDENT ATTRIBUTES: START
+                   student.setFirstName(row[0]);
+                   student.setLastName(row[1]);
+                   student.setId(Integer.parseInt(row[2]));
+                   student.setEmail(row[3]);
+                   student.setGraduatingQuarter(row[4]);
+                   student.setGraduatingYear(Integer.parseInt(row[5]));
+                   student.setType(Integer.parseInt(row[6]));
+                   if(row[7].equalsIgnoreCase("Yes"))
+                       student.setInEllensburg(true);
+                   else
+                       student.setInEllensburg(false);
+
+                   // Availability loop
+                   boolean[] availability = new boolean[32];
+                   final int END_AVAIL_INPUT = 40;
+                   for(int i = 8; i < END_AVAIL_INPUT; i++)
+                   {
+                       availability[i - 8] = row[i].equalsIgnoreCase("Open");
+                   }
+                   student.setAvailability(availability);
+
+                   // PythonExperience
+                   student.setPythonExperience(row[41].equalsIgnoreCase("Yes"));
+                   // VBExperience (Make shorter)
+                   student.setVisualBasicExperience(row[42].equalsIgnoreCase("Yes"));
+
+                   // coursesTaken loop    53
+                   boolean[] coursesTaken = new boolean[21];
+                   for(int i = 43; i < row.length; i++)
+                   {
+                       coursesTaken[i - (43)] = row[i].equalsIgnoreCase("X");
+                   }
+                   student.setCoursesTaken(coursesTaken);
+
+                   // Set priority
+                   student.setPriority();
+
+                   students.add(student);
+                   // ADDING STUDENT ATTRIBUTES: COMPLETE
+                }
             }
         } catch (IOException ex) {
            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -635,5 +845,12 @@ public class Main extends javax.swing.JFrame {
             System.out.println(courses.get(i).getSub() + "\t" + courses.get(i).getCat() + "\t" + courses.get(i).getSec() 
                    + "\t" + Arrays.toString(courses.get(i).getAssignedTAs()) + "\t" + Arrays.toString(courses.get(i).getAssignedTATypes()) + ".");
        }
+   }
+   
+   //Print at very end
+   public static void printDetails(int studentsAssigned, int studentsLeft, int coursesWithOneTA, int coursesWithNoTA)
+   {
+       System.out.println("Number of students assigned: " + studentsAssigned + 
+               "\nNumber of students left: " + studentsLeft + "\nNumber of courses with one TA: " + coursesWithOneTA + "\nNumber of courses with no TA: " + coursesWithNoTA);
    }
 }
