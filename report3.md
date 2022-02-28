@@ -3,25 +3,25 @@ Following testing methods are used for the testing purposes.
 ## Unit testing : 
 		Tested each different function by themselves and  ensured that all units are working properly. 
 
-	### Outcomes:  
+### Outcomes:  
 		 Relatively easy and fast, regular testing helps units to be bug free. 
 
 ## Integration testing :
 		 Combined all units and tested as a whole. Integration of units needs those units to be compatible with each other and produce desired output. 
 
-	### Outcomes : 
+### Outcomes : 
 		Units once combined might not work as desired. How we combine units is also a bigger factor to determine the effectiveness of the program. 
 
 ## System testing:
 		 Combined code and GUI together and tested. File paths can be entered in the given text fields and the algorithm starts when the user presses the start button. 
 
-	### Outcomes: 
+### Outcomes: 
 		GUI needs to be more user friendly, and provide feedback when the scheduling has been done. 
 
 ## Performance Testing: 
 		Tested the performance of the whole system. We are using System.Nanotime() to calculate how long for the system to produce the output. The outcomes is below 
 
-	### Outcomes: 
+### Outcomes: 
 		The system took 257000600 nanoseconds or 257.0006 milliseconds.
 
 ## Prototypes: 
