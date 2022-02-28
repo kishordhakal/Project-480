@@ -2,10 +2,7 @@ package com.mycompany.assignta;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Ramez Khalaf
- */
+
 public class Course 
 {
    //private String id;

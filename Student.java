@@ -3,10 +3,7 @@ package com.mycompany.assignta;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
-/**
- *
- * @author Ramez Khalaf
- */
+
 public class Student implements Comparable<Student>
 {
    private String firstName;
