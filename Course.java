@@ -6,8 +6,9 @@ import java.util.ArrayList;
  *
  * @author Ramez Khalaf
  */
-public class Course {
-    
+public class Course 
+{
+    //private String id;
     private String sub;
     private String cat;
     private String sec;
@@ -20,7 +21,7 @@ public class Course {
     private String campus;
     private int[] assignedTAs;      // HOLDS THE ID OF ALL TAs ASSIGNED (up to two TAs max)
     private int[] assignedTATypes;  //easier than calculating if the current course has a 392 and/or a 492 student each time we want that info. Can delete.
-    
+    //THERE WILL BE COURSES WITHOUT A DAY AND WITHOUT A TIME. THOSE CAN BE ASSIGNED TO ANY STUDENT WHO HAS MET THE OTHER REQUIREMENTS FOR THAT CLASS. GIVE THESE COURSES A PRIORITY OF 2? 
     
     public Course()
     {
@@ -85,12 +86,11 @@ public class Course {
     {
         return days;
     }
-
+    
     public String getDay(int index)
     {
         return days.get(index);
     }
-
     public String getStartTime()
     {
         return startTime;
