@@ -1,8 +1,11 @@
 package com.mycompany.assignta;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +13,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -157,6 +161,7 @@ public class Main extends javax.swing.JFrame {
          ArrayList<Course> courses = new ArrayList();
          ArrayList<Student> students392 = new ArrayList();
          ArrayList<Student> students492 = new ArrayList();
+        // ArrayList<Student> takenCourse= new ArrayList(); // courses taken cats 
          final int TYPE392 = 392;
          final int TYPE492 = 492;
             
@@ -282,37 +287,6 @@ public class Main extends javax.swing.JFrame {
          System.out.println("\n\nDetails!");
          printDetails(studentsAssigned, studentsLeft, coursesWithOneTA, coursesWithNoTA);
             
-            
-            /*
-            System.out.println("\n392 Students Remaining:");
-            System.out.println(students392_p1.size());
-            System.out.println(students392_p2.size());
-            System.out.println(students392_remaining.size());
-            System.out.println("\n492 Students Remaining");
-            System.out.println(students492_p1.size());
-            System.out.println(students492_p2.size());
-            System.out.println(students492_remaining.size());
-            */
-            
-            
-            // THEN, CHECK IF THERE ARE ANY LEFTOVER 392/492 students left. If so, put them in any course with less than 2 TAs that works with their availability.
-            
-            // Sort with comparator. If multiple attributes are equal, then sort by the next priority.
-            //I.E., if multiple students graduate 2022, then sort by quarter. If graduation quarter is the same too, then sort by coursesTaken.
-            
-            /*
-                PRIORITY:
-                GraduationYear/GraduationQuarter > Courses Taken > VB/Python Experience > Availability > 
-            
-                *one of each type per course*
-            */
-            
-            /* 
-                QUESTIONS:
-                How should "In Ellensburg" status influence the algorithm?
-                Which classes need VB experience? Python Experience?
-            
-            */
           
       }
       catch(Exception e)
@@ -342,76 +316,8 @@ public class Main extends javax.swing.JFrame {
    {
         //final int NUMBER_OF_HOURS = 32;     // better way to get //8 hours per day * 4 days (counted from students.csv)
         
-        if(students.get(0).getType() == 392)
-        {
-            for(int i = 0; i < courses.size(); i++)
-            {
-                for(int j = 0; j < students.size(); j++)
-                {
-                    if(students.get(j).getCourseAssignment().equals(""))
-                    {// after this was if(priority == 1){
-                        //Check each course to see if it has 0, 1, or 2 TAs.
-                        int[] assignedTATypes = courses.get(i).getAssignedTATypes();
-                        boolean available = isAvailable(students, courses, i, j);   //checks if student is available at the time/day of class
-
-                        //System.out.println("HERE: " + students.get(j).getCourseAssignment().equals("") + ", " + available + ", " + (assignedTATypes[0] == 0));
-                        // if TA is not already assigned, then add TA. Else, already has TA, move to next.
-                        if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[0] == 0 && 
-                                available)// && students392.get(i).getCoursesTaken().get && student.hasPython/VBExperience+courseNeedsThem)
-                        {
-                            // If course is in person, AND student is on campus, then assign them to that course.
-                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(true, false);
-
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            // if course is online, and student is online, then assign them to that course.
-                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(true, false);
-
-                                // Set course assignment
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            else
-                            {
-                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-                            }
-                        }
-                        else
-                        {
-                            //Else, already has TA, move to next. So probably delete else.
-                        }//AFTER THIS WAS }END PRIORITY
-                    }
-                }
-            }
-        }
-        else //then student.type == 492
-        {
+        if(students.get(0).getType() == 492)
+        { 
             for(int i = courses.size() - 1; i >= 0; i--)
             {
                 for(int j = 0; j < students.size(); j++)
@@ -426,48 +332,38 @@ public class Main extends javax.swing.JFrame {
                         if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[1] == 0 && 
                                 available)// && students392.get(i).getCoursesTaken().get)
                         {
-                            // If course is in person, AND student is on campus, then assign them to that course.
-                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(false, true);
+                            
+                                        // If course is in person, AND student is on campus, then assign them to that course.
+                                        if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                                        {
 
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(false, true);
 
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            // if course is online, and student is online, then assign them to that course.
-                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(false, true);
+                                            assignTACourse(students,courses, i, j);
 
-                                // Set course assignment
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            else
-                            {
-                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-                            }
+                                        }
+                                        // if course is online, and student is online, then assign them to that course.
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                                        {
+
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(false, true);
+
+                                            assignTACourse(students,courses, i, j);
+
+                                        }
+                                        // student is in ellensburg and class is online; student can still be TA for the class. 
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == true)
+                                        {
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(true, false);
+
+                                            assignTACourse(students,courses, i, j);
+
+                                        }
+                                 
+                        }
                         }
                         else
                         {
@@ -475,17 +371,8 @@ public class Main extends javax.swing.JFrame {
                         }
                     }
                 }
-            }
-        }
-   }
-  
-   /*
-   This assignment algorithm uses a different algorithm to sort low priority      *STILL NEED TO IMPLEMENT*
-   */
-   public static void assignLowPriority(ArrayList<Student> students, ArrayList<Course> courses)
-   {
-       if(students.get(0).getType() == 392)
-        {
+        } else //then student.type == 492
+        {                             
             for(int i = 0; i < courses.size(); i++)
             {
                 for(int j = 0; j < students.size(); j++)
@@ -501,62 +388,58 @@ public class Main extends javax.swing.JFrame {
                         if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[0] == 0 && 
                                 available)// && students392.get(i).getCoursesTaken().get && student.hasPython/VBExperience+courseNeedsThem)
                         {
-                            // If course is in person, AND student is on campus, then assign them to that course.
-                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(true, false);
+                                                                   // If course is in person, AND student is on campus, then assign them to that course.
+                                        if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                                        {   
+                                            
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(true, false);
 
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            // if course is online, and student is online, then assign them to that course.
-                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(true, false);
+                                            assignTACourse(students,courses, i, j);
 
-                                // Set course assignment
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            else
-                            {
-                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
-                            }
+                                        }
+                                        // if course is online, and student is online, then assign them to that course.
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                                        {
+
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(true, false);
+
+                                            assignTACourse(students,courses, i, j);
+
+                                        }
+
+                                        // student is in ellensburg and class is online; student can still be TA for the class. 
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == true)
+                                        {
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(true, false);
+
+                                            assignTACourse(students,courses, i, j);
+
+                                        }
+                                    
                         }
+                    }
                         else
                         {
                             //Else, already has TA, move to next. So probably delete else.
                         }//AFTER THIS WAS }END PRIORITY
                     }
                 }
-            }
-        }
-        else //then student.type == 492
-        {
-            for(int i = 0; i < courses.size(); i++)
+            
+        }    
+        
+   }
+  
+   /*
+   This assignment algorithm uses a different algorithm to sort low priority      *STILL NEED TO IMPLEMENT*
+   */
+   public static void assignLowPriority(ArrayList<Student> students, ArrayList<Course> courses)
+   {
+       if(students.get(0).getType() == 492)
+       {   
+           for(int i = 0; i < courses.size(); i++)
             {
                 for(int j = 0; j < students.size(); j++)
                 {
@@ -568,51 +451,45 @@ public class Main extends javax.swing.JFrame {
 
                         // if TA is not already assigned, then add TA. Else, already has TA, move to next.
                         if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[1] == 0 && 
-                                available)// && students392.get(i).getCoursesTaken().get)
+                                available) // && students392.get(i).getCoursesTaken().get)
                         {
-                            // If course is in person, AND student is on campus, then assign them to that course.
-                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(false, true);
+                            
+                                                                   
+                                        // If course is in person, AND student is on campus, then assign them to that course.
+                                        if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                                        {
+                                            
 
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                
-                                studentsAssigned++;
-                                students.remove(j);
-                            }
-                            // if course is online, and student is online, then assign them to that course.
-                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
-                            {
-                                courses.get(i).setAssignedTAs(students.get(j).getId());
-                                courses.get(i).setAssignedTATypes(false, true);
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(false, true);
 
-                                // Set course assignment
-                                String courseAssignmentStr = "";
-                                for(int d = 0; d < courses.get(i).getDays().size(); d++)
-                                {
-                                    courseAssignmentStr = courses.get(i).getDay(d);
-                                }
-                                students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
-                                        courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
-                                        courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
-                                
-                                
-                                studentsAssigned++;
-                                students.remove(j);
+                                            assignTACourse(students,courses, i, j);
+                                          
+
+                                        }
+                                        // if course is online, and student is online, then assign them to that course.
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                                        {
+
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(false, true);
+                                            assignTACourse(students,courses, i, j);
+
+                                        }
+                                        // student is in ellensburg and class is online; student can still be TA for the class. 
+                                        else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == true)
+                                        {
+                                            courses.get(i).setAssignedTAs(students.get(j).getId());
+                                            courses.get(i).setAssignedTATypes(true, false);
+
+                                            assignTACourse(students,courses, i, j);
+                            
+                              
                             }
-                            else
-                            {
-                                // else, either the student is online and the course is in person, or the student in on campus and the course is online
-                                // if the student is on Campus and the course is online, then the student can still be assigned to that course. Save that for later though.
+                         
+                            }
+                            else{
+                                
                             }
                         }
                         else
@@ -621,10 +498,93 @@ public class Main extends javax.swing.JFrame {
                         }
                     }
                 }
-            }
+             // students.type =  392   
+       }else {
+            for(int i = 0; i < courses.size(); i++)
+            {
+                for(int j = 0; j < students.size(); j++)
+                {
+                    if(students.get(j).getCourseAssignment().equals(""))
+                    {// after this was if(priority == 1){
+                        //Check each course to see if it has 0, 1, or 2 TAs.
+                        int[] assignedTATypes = courses.get(i).getAssignedTATypes();
+                        boolean available = isAvailable(students, courses, i, j);   //checks if student is available at the time/day of class
+
+                        //System.out.println("HERE: " + students.get(j).getCourseAssignment().equals("") + ", " + available + ", " + (assignedTATypes[0] == 0));
+                        // if TA is not already assigned, then add TA. Else, already has TA, move to next.
+                        if(students.get(j).getCourseAssignment().equals("") && assignedTATypes[0] == 0 && 
+                                available)// && students392.get(i).getCoursesTaken().get && student.hasPython/VBExperience+courseNeedsThem)
+                        {
+                            
+                                            // If course is in person, AND student is on campus, then assign them to that course.
+                                            if(courses.get(i).getCampus().equalsIgnoreCase("Eburg") && students.get(j).getInEllensburg() == true)
+                                            {
+
+                                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                                courses.get(i).setAssignedTATypes(true, false);
+
+                                                assignTACourse(students,courses, i, j);
+
+                                            }
+                                            // if course is online, and student is online, then assign them to that course.
+                                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == false)
+                                            {
+
+                                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                                courses.get(i).setAssignedTATypes(true, false);
+
+                                                 assignTACourse(students,courses, i, j);
+
+                                            }
+                                            // student is in ellensburg and class is online; student can still be TA for the class. 
+                                            else if(courses.get(i).getCampus().equalsIgnoreCase("Web") && students.get(j).getInEllensburg() == true)
+                                            {
+                                                courses.get(i).setAssignedTAs(students.get(j).getId());
+                                                courses.get(i).setAssignedTATypes(true, false);
+
+                                                assignTACourse(students,courses, i, j);
+
+                                            }
+                        
+                            
+                            }
+                        else
+                        {
+                            //Else, already has TA, move to next. So probably delete else.
+                        }//AFTER THIS WAS }END PRIORITY
+                    }
+                }
+            
         }
-   }
+        }
+        }
+        
+          
+       
+       
+       
+        
+
    
+   /*Actual Assignmanet fuction  */
+   public static void assignTACourse(ArrayList<Student> students, ArrayList<Course> courses, int i, int j){
+       
+
+        // Set course assignment
+        String courseAssignmentStr = "";
+        for(int d = 0; d < courses.get(i).getDays().size(); d++)
+         {
+             courseAssignmentStr = courses.get(i).getDay(d);
+         }
+         students.get(j).setCourseAssignment(courses.get(i).getSub() + courses.get(i).getCat() + 
+                    courses.get(i).getSec() + courses.get(i).getTitle() + courses.get(i).getName() + 
+                    courseAssignmentStr + courses.get(i).getRoom() + courses.get(i).getCampus());
+                                
+                                
+         studentsAssigned++;
+         students.remove(j);
+   
+   }
    /*
    This assignment algorithm allows adding up to two TAs of the same type (392/492)
    */
@@ -728,12 +688,25 @@ public class Main extends javax.swing.JFrame {
          String file = studentTextField.getText();
          BufferedReader reader = new BufferedReader(new FileReader(file));
            
-            // Get first two lines
-         if ((reader.readLine()) != null)
-            reader.readLine();
-            
-            
+            // Get first line
+         reader.readLine();
+         
+         // keep the name of the courses to check them for courses taken condition. 
          String line = "";
+         /*
+         String[] row1 = line.split(",");
+         String[] takenCourses= new String [25];  
+         for(int i = 43; i < row1.length; i++){
+             takenCourses[i - (43)]= row1[i];
+             
+         }
+         for (int i =0; i<row1.length; i++){
+          System.out.println(row1[i]);
+         } 
+         */
+         //Get second line 
+         
+         reader.readLine();
             
          while((line = reader.readLine())!= null)
          {
@@ -769,6 +742,7 @@ public class Main extends javax.swing.JFrame {
                student.setPythonExperience(row[41].equalsIgnoreCase("Yes"));
                    // VBExperience (Make shorter)
                student.setVisualBasicExperience(row[42].equalsIgnoreCase("Yes"));
+               
             
                    // coursesTaken loop    53
                boolean[] coursesTaken = new boolean[21];
@@ -872,14 +846,27 @@ public class Main extends javax.swing.JFrame {
       }
    }
    
-   // Print course assignments
-   public static void printCourseAssignments(ArrayList<Course> courses)
+   // Writes  course assignments into CSV file  
+   public static void printCourseAssignments(ArrayList<Course> courses) throws FileNotFoundException
    {
+       
+       File csvFile= new File("AssignedTA.csv");
+       PrintWriter out = new PrintWriter(csvFile);
+       // headers for the output file. 
+       out.println("Sub"+","+"Cat"+","+ "Sec"+","+"TA's Student ID  "+","+ " TA's Student ID ");
+       
+       
       for(int i = 0; i < courses.size(); i++)
       {
-         System.out.println(courses.get(i).getSub() + "\t" + courses.get(i).getCat() + "\t" + courses.get(i).getSec() 
-                   + "\t" + Arrays.toString(courses.get(i).getAssignedTAs()) + "\t" + Arrays.toString(courses.get(i).getAssignedTATypes()) + ".");
+          /*
+         out.println( courses.get(i).getSub()+ "," +courses.get(i).getCat()+ "," +courses.get(i).getSec()+ "," Arrays.toString(courses.get(i).getAssignedTAs()));
+         */
+         out.println(courses.get(i).getSub() + "," + courses.get(i).getCat() + "," + courses.get(i).getSec() 
+                   + "," + Arrays.toString(courses.get(i).getAssignedTAs()).replace("[","").replace("]",""));
+         
       }
+      out.close();
+      JOptionPane.showMessageDialog(null, "TA has been assigned");
    }
    
    //Print at very end
