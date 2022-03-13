@@ -1,4 +1,4 @@
-package com.mycompany.assignta;
+package com.mycompany.taasssigner;
 
 import java.util.ArrayList;
 

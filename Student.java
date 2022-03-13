@@ -1,4 +1,4 @@
-package com.mycompany.assignta;
+package com.mycompany.taasssigner;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
