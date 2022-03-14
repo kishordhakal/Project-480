@@ -29,7 +29,7 @@ This code below shows the Setter function for the first name of the student.
   		}
 
 This code below shows the Getter function for the first name of the student.  
-public String getFirstName()
+		public String getFirstName()
  		{
      				return firstName;
   		}
@@ -46,10 +46,12 @@ This class is the main driver of the projects that binds all parts of the progra
 This class extends javax.swing.Jframe. 
 
 This function assigns students with high priority to courses.
+
 	public static void assignHighPriority(ArrayList<Student> students, ArrayList<Course> courses,ArrayList<String> takenCourses) throws IOException {}
 
 This function assigns students with low priority to courses.
-public static void assignLowPriority(ArrayList<Student> students, ArrayList<Course> courses, ArrayList<String> takenCourses) throws IOException{} 
+
+	public static void assignLowPriority(ArrayList<Student> students, ArrayList<Course> courses, ArrayList<String> takenCourses) throws IOException{} 
 
 While assigning the courses these function will look for requirements such as,
 - if the course has TA spot available
@@ -63,7 +65,7 @@ There are few helper boolean function to check these requirements.
   
 This function checks if the 392 students will be able to TA on campus or not.
 
-public static void onOffCheck_392(ArrayList<Student> students, ArrayList<Course> courses,ArrayList<String> takenCourses, int i, int j) throws IOException{}
+	public static void onOffCheck_392(ArrayList<Student> students, ArrayList<Course> courses,ArrayList<String> takenCourses, int i, int j) throws IOException{}
 
 This function checks if the 492 students will be able to TA on campus or not.
  
@@ -84,11 +86,11 @@ This function checks if the students have taken the classes that they are about 
 This function saves the name of courses that are given in the students.csv. 
 These course names are used to compare the cat to determine if the students have taken the course or not.
 
-public static ArrayList<String> fillTakenCourses(ArrayList<String> takenCourses) throws FileNotFoundException, IOException{}
+	public static ArrayList<String> fillTakenCourses(ArrayList<String> takenCourses) throws FileNotFoundException, IOException{}
 
 This function allows two TAs for a course one 392 and another one 492 types.
  
-public static void assignCourseStudent(ArrayList<Student> students, ArrayList<Course> courses, int i, int j){}
+	public static void assignCourseStudent(ArrayList<Student> students, ArrayList<Course> courses, int i, int j){}
 
 This function checks the time availability of students in a given day and time.
  
